@@ -7,22 +7,51 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
+// Function to load configuration (config.json)
+async function loadConfig() {
+    const loginURL = `${BASE_URL}66e331a2e41b4d34e42e3a07`; // Use bin ID from config
+    
+    try {
+        const response = await fetch(loginURL, { headers });
+        const data = await response.json();
+        config = data.record;
+    } catch (error) {
+        return console.error('Error loading config.json:', error);
+    }
+}
+
+// Initialize hamburger menu if on dashboard.html
+function initializeHamburgerMenu() {
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('dashboard.html')) {
+        const hamburgerButton = document.getElementById('hamburgerButton');
+        if (hamburgerButton) {
+            hamburgerButton.addEventListener('click', function () {
+                const menu = document.getElementById('hamburgerMenu');
+                menu.classList.toggle('-translate-x-full'); // Toggle slide-in and slide-out
+            });
+        }
+    }
+}
+
 // Login function that checks credentials using the hosted JSON
 function login(userID, password) {
-    const loginURL = `${BASE_URL}66e32170acd3cb34a8826c15`; // Example bin ID for login data
+    loadConfig().then(() => {
+        const loginURL = `${BASE_URL}${config.login}`; // Use bin ID from config
 
-    fetch(loginURL, { headers })
-        .then(response => response.json())
-        .then(data => {
-            const loginData = data.record; // Access the 'record' key in the JSON response
-            if (userID === loginData.username && password === loginData.password) {
-                sessionStorage.setItem('token', loginData.token);
-                window.location.href = 'dashboard.html';  // Redirect to dashboard on successful login
-            } else {
-                alert('Invalid credentials, please try again.');
-            }
-        })
-        .catch(error => console.error('Error fetching login.json:', error));
+        fetch(loginURL, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const loginData = data.record; // Access the 'record' key in the JSON response
+                if (userID === loginData.username && password === loginData.password) {
+                    sessionStorage.setItem('token', loginData.token);
+                    window.location.href = 'dashboard.html';  // Redirect to dashboard on successful login
+                } else {
+                    alert('Invalid credentials, please try again.');
+                }
+            })
+            .catch(error => console.error('Error fetching login.json:', error));
+    });
 }
 
 // Fetch data for the dashboard dynamically
@@ -33,27 +62,32 @@ function fetchDashboardData() {
         return;
     }
 
-    const dashboardURL = `${BASE_URL}66e321c1acd3cb34a8826c3c`; // Example bin ID for dashboard data
+    loadConfig().then(() => {
+        const dashboardURL = `${BASE_URL}${config.dashboard}`; // Use bin ID from config
 
-    fetch(dashboardURL, { headers })
-        .then(response => response.json())
-        .then(data => {
-            const dashboardData = data.record;
-            document.getElementById('welcomeMessage').innerText = `Welcome, ${dashboardData.firstName}`;
-            document.getElementById('coverageSummary').innerHTML = `
-                <h2>Coverage Summary</h2>
-                <p>Plan: ${dashboardData.planName}</p>
-                <p>Status: ${dashboardData.status}</p>
-                <p>Effective Date: ${dashboardData.effectiveDate}</p>
-            `;
-            let claimsHtml = '<h2>Recent Claims</h2><ul>';
-            dashboardData.recentClaims.forEach(claim => {
-                claimsHtml += `<li>${claim.provider}: $${claim.amountPaid}</li>`;
-            });
-            claimsHtml += '</ul>';
-            document.getElementById('recentClaims').innerHTML = claimsHtml;
-        })
-        .catch(error => console.error('Error fetching dashboard data:', error));
+        fetch(dashboardURL, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const dashboardData = data.record;
+                document.getElementById('welcomeMessage').innerText = `Welcome, ${dashboardData.firstName}`;
+                document.getElementById('coverageSummary').innerHTML = `
+                    <h2>Coverage Summary</h2>
+                    <p>Plan: ${dashboardData.planName}</p>
+                    <p>Status: ${dashboardData.status}</p>
+                    <p>Effective Date: ${dashboardData.effectiveDate}</p>
+                `;
+                let claimsHtml = '<h2>Recent Claims</h2><ul>';
+                dashboardData.recentClaims.forEach(claim => {
+                    claimsHtml += `<li>${claim.provider}: $${claim.amountPaid}</li>`;
+                });
+                claimsHtml += '</ul>';
+                document.getElementById('recentClaims').innerHTML = claimsHtml;
+
+                // Initialize the hamburger menu only for the dashboard page
+                initializeHamburgerMenu();
+            })
+            .catch(error => console.error('Error fetching dashboard data:', error));
+    });
 }
 
 // Fetch claims data dynamically
