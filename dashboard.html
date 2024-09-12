@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-500 text-white p-6 text-center">
+        <h1 id="welcomeMessage" class="text-2xl">Welcome</h1>
+    </header>
+
+    <main class="container mx-auto p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white shadow-lg p-6 rounded-lg">
+                <h2 class="text-xl font-semibold mb-4">Coverage Summary</h2>
+                <div id="coverageSummary" class="space-y-2">
+                    <!-- Dynamic content will be populated here -->
+                </div>
+            </div>
+
+            <div class="bg-white shadow-lg p-6 rounded-lg">
+                <h2 class="text-xl font-semibold mb-4">Recent Claims</h2>
+                <div id="recentClaims" class="space-y-2">
+                    <!-- Dynamic content will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button onclick="window.location.href='claims-summary.html'" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mx-2">Claims Summary</button>
+            <button onclick="window.location.href='spending-summary.html'" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mx-2">Spending Summary</button>
+            <button onclick="window.location.href='coverage-benefits.html'" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mx-2">Coverage & Benefits</button>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Fetch data for the dashboard
+        fetchDashboardData();
+    </script>
+</body>
+</html>

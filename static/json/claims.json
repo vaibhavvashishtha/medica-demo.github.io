@@ -1,0 +1,17 @@
+{
+    "claims": [
+      {
+        "providerName": "Dr. Adams",
+        "visitDate": "2024-01-10",
+        "amountBilled": 400,
+        "paymentStatus": "Paid"
+      },
+      {
+        "providerName": "General Hospital",
+        "visitDate": "2024-02-05",
+        "amountBilled": 1000,
+        "paymentStatus": "Processing"
+      }
+    ]
+  }
+  

@@ -1,0 +1,17 @@
+{
+    "firstName": "John",
+    "planName": "Gold Plan",
+    "status": "Active",
+    "effectiveDate": "2024-01-01",
+    "recentClaims": [
+      {
+        "provider": "Dr. Smith",
+        "amountPaid": 500
+      },
+      {
+        "provider": "City Hospital",
+        "amountPaid": 1000
+      }
+    ]
+  }
+  

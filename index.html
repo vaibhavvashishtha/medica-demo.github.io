@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+        <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label for="userID" class="block text-sm font-medium text-gray-700">User ID</label>
+                <input type="text" id="userID" name="userID" class="mt-1 p-2 w-full border rounded-md shadow-sm" required>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" class="mt-1 p-2 w-full border rounded-md shadow-sm" required>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showPassword" onclick="togglePassword()" class="mr-2">
+                <label for="showPassword" class="text-sm text-gray-600">Show Password</label>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Login</button>
+        </form>
+        <div class="text-center mt-4">
+            <a href="#" class="text-blue-500 hover:underline">Forgot User ID?</a>
+            <br>
+            <a href="#" class="text-blue-500 hover:underline">Forgot Password?</a>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userID = document.getElementById('userID').value;
+            const password = document.getElementById('password').value;
+            login(userID, password);  // Calling the login function from app.js
+        });
+
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+    </script>
+</body>
+</html>
