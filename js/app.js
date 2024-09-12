@@ -10,27 +10,13 @@ const headers = {
 // Function to load configuration (config.json)
 async function loadConfig() {
     const loginURL = `${BASE_URL}66e331a2e41b4d34e42e3a07`; // Use bin ID from config
-    
+
     try {
         const response = await fetch(loginURL, { headers });
         const data = await response.json();
         config = data.record;
     } catch (error) {
         return console.error('Error loading config.json:', error);
-    }
-}
-
-// Initialize hamburger menu if on dashboard.html
-function initializeHamburgerMenu() {
-    const currentPath = window.location.pathname;
-    if (currentPath.includes('dashboard.html')) {
-        const hamburgerButton = document.getElementById('hamburgerButton');
-        if (hamburgerButton) {
-            hamburgerButton.addEventListener('click', function () {
-                const menu = document.getElementById('hamburgerMenu');
-                menu.classList.toggle('-translate-x-full'); // Toggle slide-in and slide-out
-            });
-        }
     }
 }
 
@@ -54,6 +40,12 @@ function login(userID, password) {
     });
 }
 
+// Logout function to clear the session and redirect to login page
+function logout() {
+    sessionStorage.clear();
+    window.location.href = 'index.html';  // Redirect to login page after logout
+}
+
 // Fetch data for the dashboard dynamically
 function fetchDashboardData() {
     const token = sessionStorage.getItem('token');
@@ -69,28 +61,37 @@ function fetchDashboardData() {
             .then(response => response.json())
             .then(data => {
                 const dashboardData = data.record;
-                document.getElementById('welcomeMessage').innerText = `Welcome, ${dashboardData.firstName}`;
-                document.getElementById('coverageSummary').innerHTML = `
-                    <h2>Coverage Summary</h2>
-                    <p>Plan: ${dashboardData.planName}</p>
-                    <p>Status: ${dashboardData.status}</p>
-                    <p>Effective Date: ${dashboardData.effectiveDate}</p>
-                `;
-                let claimsHtml = '<h2>Recent Claims</h2><ul>';
-                dashboardData.recentClaims.forEach(claim => {
-                    claimsHtml += `<li>${claim.provider}: $${claim.amountPaid}</li>`;
-                });
-                claimsHtml += '</ul>';
-                document.getElementById('recentClaims').innerHTML = claimsHtml;
 
-                // Initialize the hamburger menu only for the dashboard page
+                // Inject Coverage Summary Table Data
+                let coverageHtml = `
+                    <tr>
+                        <td class="px-4 py-2">${dashboardData.planName}</td>
+                        <td class="px-4 py-2">${dashboardData.effectiveDate}</td>
+                        <td class="px-4 py-2">${dashboardData.status}</td>
+                    </tr>
+                `;
+                document.getElementById('coverageSummaryData').innerHTML = coverageHtml;
+
+                // Inject Recent Claims Table Data
+                let claimsHtml = '';
+                dashboardData.recentClaims.forEach(claim => {
+                    claimsHtml += `
+                        <tr>
+                            <td class="px-4 py-2">${claim.provider}</td>
+                            <td class="px-4 py-2">$${claim.amountPaid}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('recentClaimsData').innerHTML = claimsHtml;
+
+                // Initialize the hamburger menu 
                 initializeHamburgerMenu();
             })
             .catch(error => console.error('Error fetching dashboard data:', error));
     });
 }
 
-// Fetch claims data dynamically
+// Fetch claims data dynamically and inject into the table
 function fetchClaimsData() {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -98,30 +99,34 @@ function fetchClaimsData() {
         return;
     }
 
-    const claimsURL = `${BASE_URL}66e321a8acd3cb34a8826c35`; // Example bin ID for claims data
+    loadConfig().then(() => {
+        const claimsURL = `${BASE_URL}${config.claims}`; // Use bin ID from config
 
-    fetch(claimsURL, { headers })
-        .then(response => response.json())
-        .then(data => {
-            const claimsData = data.record;
-            let claimsHtml = '<h2>Claims Summary</h2><table><tr><th>Provider</th><th>Date</th><th>Total</th><th>Status</th></tr>';
-            claimsData.claims.forEach(claim => {
-                claimsHtml += `
-                    <tr>
-                        <td>${claim.providerName}</td>
-                        <td>${claim.visitDate}</td>
-                        <td>${claim.amountBilled}</td>
-                        <td>${claim.paymentStatus}</td>
-                    </tr>
-                `;
-            });
-            claimsHtml += '</table>';
-            document.getElementById('claimsSummary').innerHTML = claimsHtml;
-        })
-        .catch(error => console.error('Error fetching claims data:', error));
+        fetch(claimsURL, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const claimsData = data.record;
+                let claimsHtml = '';
+                claimsData.claims.forEach(claim => {
+                    claimsHtml += `
+                        <tr>
+                            <td class="px-4 py-2">${claim.providerName}</td>
+                            <td class="px-4 py-2">${claim.visitDate}</td>
+                            <td class="px-4 py-2">$${claim.amountBilled}</td>
+                            <td class="px-4 py-2">${claim.paymentStatus}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('claimsData').innerHTML = claimsHtml;
+
+                // Initialize the hamburger menu 
+                initializeHamburgerMenu();
+            })
+            .catch(error => console.error('Error fetching claims data:', error));
+    });
 }
 
-// Fetch spending data dynamically
+// Fetch spending data dynamically and inject into the cards
 function fetchSpendingData() {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -129,22 +134,40 @@ function fetchSpendingData() {
         return;
     }
 
-    const spendingURL = `${BASE_URL}66e321d1ad19ca34f8a3f405`; // Example bin ID for spending data
+    loadConfig().then(() => {
+        const spendingURL = `${BASE_URL}${config.spending}`; // Use bin ID from config
 
-    fetch(spendingURL, { headers })
-        .then(response => response.json())
-        .then(data => {
-            const spendingData = data.record;
-            document.getElementById('spendingSummary').innerHTML = `
-                <h2>Spending Summary</h2>
-                <p>Deductible Spent: $${spendingData.deductibleSpent} / ${spendingData.deductibleLimit}</p>
-                <p>Out-of-Pocket Spent: $${spendingData.outOfPocketSpent} / ${spendingData.outOfPocketLimit}</p>
-            `;
-        })
-        .catch(error => console.error('Error fetching spending data:', error));
+        fetch(spendingURL, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const spendingData = data.record;
+
+                // Deductible
+                const deductibleSpent = spendingData.deductibleSpent;
+                const deductibleLimit = spendingData.deductibleLimit;
+                const deductiblePercentage = (deductibleSpent / deductibleLimit) * 100;
+
+                document.getElementById('deductibleSpent').innerText = `$${deductibleSpent}`;
+                document.getElementById('deductibleLimit').innerText = `$${deductibleLimit}`;
+                document.getElementById('deductibleProgress').style.width = `${deductiblePercentage}%`;
+
+                // Out-of-Pocket
+                const outOfPocketSpent = spendingData.outOfPocketSpent;
+                const outOfPocketLimit = spendingData.outOfPocketLimit;
+                const outOfPocketPercentage = (outOfPocketSpent / outOfPocketLimit) * 100;
+
+                document.getElementById('outOfPocketSpent').innerText = `$${outOfPocketSpent}`;
+                document.getElementById('outOfPocketLimit').innerText = `$${outOfPocketLimit}`;
+                document.getElementById('outOfPocketProgress').style.width = `${outOfPocketPercentage}%`;
+
+                // Initialize the hamburger menu 
+                initializeHamburgerMenu();
+            })
+            .catch(error => console.error('Error fetching spending data:', error));
+    });
 }
 
-// Fetch coverage and benefits data dynamically
+// Fetch coverage and benefits data dynamically and inject into the table
 function fetchCoverageData() {
     const token = sessionStorage.getItem('token');
     if (!token) {
@@ -152,19 +175,38 @@ function fetchCoverageData() {
         return;
     }
 
-    const coverageURL = `${BASE_URL}66e321b5ad19ca34f8a3f3fd`; // Example bin ID for coverage data
+    loadConfig().then(() => {
+        const coverageURL = `${BASE_URL}${config.coverage}`; // Use bin ID from config
 
-    fetch(coverageURL, { headers })
-        .then(response => response.json())
-        .then(data => {
-            const coverageData = data.record;
-            document.getElementById('coverageDetails').innerHTML = `
-                <h2>Coverage & Benefits</h2>
-                <p>Plan Type: ${coverageData.planType}</p>
-                <p>Effective Date: ${coverageData.effectiveDate}</p>
-                <p>End Date: ${coverageData.endDate}</p>
-                <p>ID Number: ${coverageData.idNumber}</p>
-            `;
-        })
-        .catch(error => console.error('Error fetching coverage data:', error));
+        fetch(coverageURL, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const coverageData = data.record;
+                let coverageHtml = `
+                    <tr>
+                        <td class="px-4 py-2">${coverageData.planType}</td>
+                        <td class="px-4 py-2">${coverageData.effectiveDate}</td>
+                        <td class="px-4 py-2">${coverageData.endDate}</td>
+                        <td class="px-4 py-2">${coverageData.idNumber}</td>
+                    </tr>
+                `;
+                document.getElementById('coverageData').innerHTML = coverageHtml;
+
+                // Initialize the hamburger menu 
+                initializeHamburgerMenu();
+            })
+            .catch(error => console.error('Error fetching coverage data:', error));
+    });
+}
+
+// Hamburger Menu Toggle (for dashboard only)
+function initializeHamburgerMenu() {
+    const hamburgerButton = document.getElementById('hamburgerButton');
+    if (hamburgerButton) {
+        hamburgerButton.addEventListener('click', function () {
+            const menu = document.getElementById('hamburgerMenu');
+            menu.classList.toggle('-translate-x-full'); // Toggle slide-in and slide-out
+        });
+    }
+
 }

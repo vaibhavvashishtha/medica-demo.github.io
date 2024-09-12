@@ -33,24 +33,71 @@
         <button onclick="logout()" class="text-white">Logout</button>
     </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white shadow-lg p-6 rounded-lg">
+    <div class="flex flex-col lg:flex-row">
+
+        <!-- Main Content with Tables for Coverage and Recent Claims -->
+        <div class="container mx-auto p-6 lg:w-3/4">
+            <!-- Coverage Summary Table -->
+            <div class="bg-white shadow-lg p-6 rounded-lg mb-6">
                 <h2 class="text-xl font-semibold mb-4">Coverage Summary</h2>
-                <div id="coverageSummary" class="space-y-2">
-                    <!-- Dynamic content will be populated here -->
-                </div>
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan Type</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effective Date</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coverageSummaryData" class="bg-white divide-y divide-gray-200">
+                        <!-- Dynamic content will be populated here -->
+                    </tbody>
+                </table>
             </div>
 
+            <!-- Recent Claims Table -->
             <div class="bg-white shadow-lg p-6 rounded-lg">
                 <h2 class="text-xl font-semibold mb-4">Recent Claims</h2>
-                <div id="recentClaims" class="space-y-2">
-                    <!-- Dynamic content will be populated here -->
-                </div>
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Provider</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentClaimsData" class="bg-white divide-y divide-gray-200">
+                        <!-- Dynamic content will be populated here -->
+                    </tbody>
+                </table>
             </div>
         </div>
-    </main>
+
+        <!-- Right Sidebar with Three Sections -->
+        <aside class="lg:w-1/4 p-6 space-y-6">
+            <!-- Section 1 -->
+            <div class="bg-white shadow-lg p-4 rounded-lg">
+                <img src="https://via.placeholder.com/150" alt="Image 1" class="w-full h-32 object-cover rounded-t-lg mb-4">
+                <h3 class="text-lg font-semibold mb-2">Health Insurance Guide</h3>
+                <p class="text-gray-600 mb-4">Learn everything you need to know about health insurance.</p>
+                <a href="health-insurance-detail.html" class="text-blue-500 hover:underline">Read more</a>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="bg-white shadow-lg p-4 rounded-lg">
+                <img src="https://via.placeholder.com/150" alt="Image 2" class="w-full h-32 object-cover rounded-t-lg mb-4">
+                <h3 class="text-lg font-semibold mb-2">Understanding Your Claims</h3>
+                <p class="text-gray-600 mb-4">Find out how to file claims and what you need to know.</p>
+                <a href="claims-detail.html" class="text-blue-500 hover:underline">Read more</a>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="bg-white shadow-lg p-4 rounded-lg">
+                <img src="https://via.placeholder.com/150" alt="Image 3" class="w-full h-32 object-cover rounded-t-lg mb-4">
+                <h3 class="text-lg font-semibold mb-2">Manage Your Plan</h3>
+                <p class="text-gray-600 mb-4">Learn how to manage your health insurance plan effectively.</p>
+                <a href="plan-management-detail.html" class="text-blue-500 hover:underline">Read more</a>
+            </div>
+        </aside>
+    </div>
 
     <script src="js/app.js"></script>
     <script>
