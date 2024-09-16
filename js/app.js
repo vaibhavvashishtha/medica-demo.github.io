@@ -210,3 +210,60 @@ function initializeHamburgerMenu() {
     }
 
 }
+
+// Fetch family members data dynamically and inject into the table
+function fetchFamilyMembersData() {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'index.html';  // Redirect if not logged in
+        return;
+    }
+
+    loadConfig().then(() => {
+        const familyMembersURL = `${BASE_URL}${config.family-members}`; // Use bin ID for family members JSON
+
+        fetch(familyMembersURL, { headers })
+            .then(response => response.json())
+            .then(data => {
+                const familyMembersData = data.record.familyMembers;
+                let familyHtml = '';
+                familyMembersData.forEach(member => {
+                    familyHtml += `
+                        <tr>
+                            <td class="px-4 py-2">${member.name}</td>
+                            <td class="px-4 py-2">${member.dob}</td>
+                            <td class="px-4 py-2">${member.planType}</td>
+                            <td class="px-4 py-2">${member.startDate}</td>
+                            <td class="px-4 py-2">${member.endDate}</td>
+                            <td class="px-4 py-2">${member.groupName}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('familyMembersData').innerHTML = familyHtml;
+            })
+            .catch(error => console.error('Error fetching family members data:', error));
+    });
+}
+
+
+// Function to include external HTML files (header, head, left nav)
+function includeHTML() {
+    const elements = document.querySelectorAll('[include-html]');
+    elements.forEach(el => {
+        const file = el.getAttribute('include-html');
+        if (file) {
+            fetch(file)
+                .then(response => response.text())
+                .then(data => {
+                    el.innerHTML = data;
+                    el.removeAttribute('include-html');
+                })
+                .catch(error => console.error('Error loading HTML file:', error));
+        }
+    });
+}
+
+// Call includeHTML() on page load to load the head, header, and nav sections
+document.addEventListener('DOMContentLoaded', function() {
+    includeHTML();
+});
