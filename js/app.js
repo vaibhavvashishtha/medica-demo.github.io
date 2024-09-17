@@ -57,8 +57,6 @@ function handlePageData(ctaFrom) {
 
             // Dashboard Page Data
             if (currentPath.includes('dashboard.html')) {
-                document.getElementById('welcomeMessage').textContent = `Welcome, ${data.firstName}`;
-
                 // Populate Coverage Summary
                 const coverageHtml = `
                     <tr>
@@ -80,6 +78,20 @@ function handlePageData(ctaFrom) {
                     `;
                 });
                 document.getElementById('recentClaimsData').innerHTML = claimsHtml;
+            }
+
+            else if (currentPath.includes('coverage-benefits.html')) {
+                // Populate Coverage Summary
+                const coverageHtml = `
+                    <tr>
+                            <td class="px-4 py-2">${data.planType}</td>
+                            <td class="px-4 py-2">${data.effectiveDate}</td>
+                            <td class="px-4 py-2">$${data.endDate}</td>
+                            <td class="px-4 py-2">${data.idNumber}</td>
+                        </tr>
+                `;
+                document.getElementById('coverageData').innerHTML = coverageHtml;
+
             }
 
             // Claims Summary Page Data
@@ -115,10 +127,6 @@ function handlePageData(ctaFrom) {
                 document.getElementById('outOfPocketProgress').style.width = `${outOfPocketPercentage}%`;
             }
 
-            // Family Members Page Data
-            else if (currentPath.includes('family-members.html')) {
-                fetchFamilyMembersData(data);
-            }
         })
         .catch(error => console.error('Error loading page data:', error));
 }
@@ -148,11 +156,12 @@ function logout() {
 
 // Initialize the application on page load
 document.addEventListener('DOMContentLoaded', function () {
-    setPageTitle();
     includeHTML(() => {
         initializeHamburgerMenu();  // Initialize hamburger menu functionality after HTML is included
         handlePageData();           // Fetch data and inject into the page
     });
+    setPageTitle();
+
 });
 
 // Fetch family members data dynamically and inject into cards
