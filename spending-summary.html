@@ -8,30 +8,12 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <!-- Hamburger Menu -->
-    <div id="hamburgerMenu" class="fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform -translate-x-full transition-transform">
-        <div class="p-4">
-            <h2 class="text-lg font-semibold mb-4">Menu</h2>
-            <nav>
-                <a href="dashboard.html" class="block py-2 hover:bg-gray-700">Dashboard</a>
-                <a href="claims-summary.html" class="block py-2 hover:bg-gray-700">Claims Summary</a>
-                <a href="spending-summary.html" class="block py-2 hover:bg-gray-700">Spending Summary</a>
-                <a href="coverage-benefits.html" class="block py-2 hover:bg-gray-700">Coverage & Benefits</a>
-                <a href="#" onclick="logout()" class="block py-2 text-red-400 hover:bg-gray-700">Logout</a>
-            </nav>
-        </div>
-    </div>
+    <!-- Include Left Navigation -->
+    <div include-html="left-nav.html"></div>
+    
+    <!-- Include Header -->
+    <div include-html="header.html"></div>
 
-    <!-- Top Bar with Hamburger and Logout -->
-    <header class="bg-blue-500 text-white p-4 flex justify-between items-center">
-        <button id="hamburgerButton" class="text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
-        <h1 class="text-2xl">Spending Summary</h1>
-        <button onclick="logout()" class="text-white">Logout</button>
-    </header>
 
     <!-- Main Content and Right Sidebar -->
     <div class="flex flex-col lg:flex-row">
@@ -85,10 +67,8 @@
         </aside>
     </div>
 
+    <script src="js/apiManager.js"></script>
     <script src="js/app.js"></script>
-    <script>
-        // Fetch spending data
-        fetchSpendingData();
-    </script>
+    
 </body>
 </html>
