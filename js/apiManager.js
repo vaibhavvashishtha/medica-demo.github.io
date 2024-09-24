@@ -21,22 +21,22 @@ class APIManager {
 
         // Dashboard Page
         if (currentPath.includes('dashboard.html')) {
-            return this.fetchData(this.config.dashboard);
+            return this.fetchData(this.config.familyMembers);
         }
 
         // Claims Summary Page
         else if (currentPath.includes('claims-summary.html')) {
-            return this.fetchData(this.config.claims);
+            return this.fetchData(this.config.familyMembers);
         }
 
         // Spending Summary Page
         else if (currentPath.includes('spending-summary.html')) {
-            return this.fetchData(this.config.spending);
+            return this.fetchData(this.config.familyMembers);
         }
 
         // Coverage & Benefits Page
         else if (currentPath.includes('coverage-benefits.html')) {
-            return this.fetchData(this.config.coverage);
+            return this.fetchData(this.config.familyMembers);
         }
 
         // Family Members Page

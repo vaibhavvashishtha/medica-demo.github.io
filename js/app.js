@@ -57,19 +57,29 @@ function handlePageData(ctaFrom) {
 
             // Dashboard Page Data
             if (currentPath.includes('dashboard.html')) {
+
+                const familyMembersData = data.familyMembers;  // All family members data
+                const member = familyMembersData.find(m => m.id == sessionStorage.getItem('loggedInUserId'));  // Find the logged-in user by ID
+
+                if (!member) {
+                    alert('Logged-in user not found.');
+                    return;
+                }
+
+
                 // Populate Coverage Summary
                 const coverageHtml = `
                     <tr>
-                        <td class="px-4 py-2">${data.planName}</td>
-                        <td class="px-4 py-2">${data.effectiveDate}</td>
-                        <td class="px-4 py-2">${data.status}</td>
+                        <td class="px-4 py-2">${member.dashboard.planName}</td>
+                        <td class="px-4 py-2">${member.dashboard.effectiveDate}</td>
+                        <td class="px-4 py-2">${member.dashboard.status}</td>
                     </tr>
                 `;
                 document.getElementById('coverageSummaryData').innerHTML = coverageHtml;
 
                 // Populate Recent Claims
                 let claimsHtml = '';
-                data.recentClaims.forEach(claim => {
+                member.dashboard.recentClaims.forEach(claim => {
                     claimsHtml += `
                         <tr>
                             <td class="px-4 py-2">${claim.provider}</td>
@@ -81,13 +91,21 @@ function handlePageData(ctaFrom) {
             }
 
             else if (currentPath.includes('coverage-benefits.html')) {
+
+                const familyMembersData = data.familyMembers;  // All family members data
+                const member = familyMembersData.find(m => m.id == sessionStorage.getItem('loggedInUserId'));  // Find the logged-in user by ID
+
+                if (!member) {
+                    alert('Logged-in user not found.');
+                    return;
+                }
                 // Populate Coverage Summary
                 const coverageHtml = `
                     <tr>
-                            <td class="px-4 py-2">${data.planType}</td>
-                            <td class="px-4 py-2">${data.effectiveDate}</td>
-                            <td class="px-4 py-2">$${data.endDate}</td>
-                            <td class="px-4 py-2">${data.idNumber}</td>
+                            <td class="px-4 py-2">${member.coverageBenefits.planType}</td>
+                            <td class="px-4 py-2">${member.coverageBenefits.effectiveDate}</td>
+                            <td class="px-4 py-2">${member.coverageBenefits.endDate}</td>
+                            <td class="px-4 py-2">${member.coverageBenefits.idNumber}</td>
                         </tr>
                 `;
                 document.getElementById('coverageData').innerHTML = coverageHtml;
@@ -96,31 +114,50 @@ function handlePageData(ctaFrom) {
 
             // Claims Summary Page Data
             else if (currentPath.includes('claims-summary.html')) {
+                const familyMembersData = data.familyMembers;  // All family members data
+                const member = familyMembersData.find(m => m.id == sessionStorage.getItem('loggedInUserId'));  // Find the logged-in user by ID
+
+                if (!member) {
+                    alert('Logged-in user not found.');
+                    return;
+                }
+
+                // Now display the claimsSummary for the logged-in user
                 let claimsHtml = '';
-                data.claims.forEach(claim => {
+                member.claimsSummary.forEach(claim => {
                     claimsHtml += `
-                        <tr>
-                            <td class="px-4 py-2">${claim.providerName}</td>
-                            <td class="px-4 py-2">${claim.visitDate}</td>
-                            <td class="px-4 py-2">$${claim.amountBilled}</td>
-                            <td class="px-4 py-2">${claim.paymentStatus}</td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td class="px-4 py-2">${claim.providerName}</td>
+                        <td class="px-4 py-2">${claim.visitDate}</td>
+                        <td class="px-4 py-2">$${claim.amountBilled}</td>
+                        <td class="px-4 py-2">${claim.paymentStatus}</td>
+                    </tr>
+                `;
                 });
+
+                // Inject the claims into the table body in HTML
                 document.getElementById('claimsData').innerHTML = claimsHtml;
+
             }
 
             // Spending Summary Page Data
             else if (currentPath.includes('spending-summary.html')) {
-                const deductibleSpent = data.deductibleSpent;
-                const deductibleLimit = data.deductibleLimit;
+
+                const member = data.familyMembers.find(m => m.id == sessionStorage.getItem('loggedInUserId'));  // Find the logged-in user by ID
+
+            if (!member) {
+                alert('Logged-in user not found.');
+                return;
+            }
+                const deductibleSpent = member.spendingSummary.deductibleSpent;
+                const deductibleLimit = member.spendingSummary.deductibleLimit;
                 const deductiblePercentage = (deductibleSpent / deductibleLimit) * 100;
                 document.getElementById('deductibleSpent').innerText = `$${deductibleSpent}`;
                 document.getElementById('deductibleLimit').innerText = `$${deductibleLimit}`;
                 document.getElementById('deductibleProgress').style.width = `${deductiblePercentage}%`;
 
-                const outOfPocketSpent = data.outOfPocketSpent;
-                const outOfPocketLimit = data.outOfPocketLimit;
+                const outOfPocketSpent = member.spendingSummary.outOfPocketSpent;
+                const outOfPocketLimit = member.spendingSummary.outOfPocketLimit;
                 const outOfPocketPercentage = (outOfPocketSpent / outOfPocketLimit) * 100;
                 document.getElementById('outOfPocketSpent').innerText = `$${outOfPocketSpent}`;
                 document.getElementById('outOfPocketLimit').innerText = `$${outOfPocketLimit}`;
@@ -137,20 +174,44 @@ function handlePageData(ctaFrom) {
 }
 
 // Login function that checks credentials using the hosted JSON
-function login(userID, password) {
+// function login(userID, password) {
 
+//     apiManager.fetchDataForPage('login')
+//         .then(data => {
+//             const loginData = data;
+//             if (userID === loginData.username && password === loginData.password) {
+//                 sessionStorage.setItem('token', loginData.token);
+//                 window.location.href = 'dashboard.html';  // Redirect to dashboard on successful login
+//             } else {
+//                 alert('Invalid credentials, please try again.');
+//             }
+//         }
+//         )
+
+// }
+function login(username, password) {
+    // Fetch the user data from the JSON using the API manager
     apiManager.fetchDataForPage('login')
         .then(data => {
-            const loginData = data;
-            if (userID === loginData.username && password === loginData.password) {
-                sessionStorage.setItem('token', loginData.token);
-                window.location.href = 'dashboard.html';  // Redirect to dashboard on successful login
+            const users = data.users;  // Array of users from the JSON
+
+            // Check if any user matches the entered username and password
+            const user = users.find(user => user.username === username && user.password === password);
+            alert(user.username + " " + user.password)
+            if (user) {
+                // Store the user's token in sessionStorage and redirect to the dashboard
+                sessionStorage.setItem('token', user.token);
+                sessionStorage.setItem('loggedInUserId', user.id);  // Store the user's ID as well
+                window.location.href = 'dashboard.html';  // Redirect to dashboard
             } else {
+                // If no user matches, show an invalid credentials alert
                 alert('Invalid credentials, please try again.');
             }
-        }
-        )
-
+        })
+        .catch(error => {
+            console.error('Error fetching login data:', error);
+            alert('An error occurred during login. Please try again.');
+        });
 }
 
 // Logout function to clear the session and redirect to login page
@@ -177,13 +238,13 @@ function fetchFamilyMembersData(data) {
         return;
     }
 
-    
-                const familyMembersData = data.familyMembers;
-                let familyHtml = '';
 
-                // Loop through each family member and create a card for them
-                familyMembersData.forEach((member, index) => {
-                    familyHtml += `
+    const familyMembersData = data.familyMembers;
+    let familyHtml = '';
+
+    // Loop through each family member and create a card for them
+    familyMembersData.forEach((member, index) => {
+        familyHtml += `
                         <div class="bg-white shadow-lg rounded-lg p-6 max-w-sm mx-auto transition-transform transform hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
                             <div class="flex items-center space-x-4">
                                 <div class="w-16 h-16 rounded-full bg-blue-100 flex-shrink-0">
@@ -205,10 +266,10 @@ function fetchFamilyMembersData(data) {
                             </div>
                         </div>
                     `;
-                });
+    });
 
-                // Insert the generated HTML into the page
-                document.getElementById('familyMembersData').innerHTML = familyHtml;
-           
+    // Insert the generated HTML into the page
+    document.getElementById('familyMembersData').innerHTML = familyHtml;
+
 }
 
