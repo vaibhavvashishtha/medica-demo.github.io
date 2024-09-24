@@ -273,3 +273,33 @@ function fetchFamilyMembersData(data) {
 
 }
 
+
+function switchFamilyMember() {
+    const selectedMemberId = document.getElementById('familyMemberDropdown').value;
+    sessionStorage.setItem('loggedInUserId', selectedMemberId);  // Store the selected member's ID in sessionStorage
+    window.location.reload();  // Reload the page to display data for the selected family member
+}
+
+function setDropdownSelection() {
+    const dropdown = document.getElementById('familyMemberDropdown');  // Ensure the dropdown element exists
+    if (!dropdown) {
+        console.error('Dropdown element not found');
+        return;  // Stop execution if the dropdown is missing
+    }
+
+    const loggedInUserId = sessionStorage.getItem('loggedInUserId');  // Get the currently logged-in user ID
+
+    if (!loggedInUserId) {
+        // If no user is logged in, set the default to the first family member and store it in sessionStorage
+        sessionStorage.setItem('loggedInUserId', '1');
+        dropdown.value = '1';  // Set the default selection to John Doe (id = 1)
+    } else {
+        // Set the dropdown selection to the currently logged-in user
+        dropdown.value = loggedInUserId;
+    }
+}
+
+// Ensure the DOM is fully loaded before accessing the dropdown
+document.addEventListener('DOMContentLoaded', function () {
+    setDropdownSelection();  // Ensure the dropdown reflects the current user
+});
