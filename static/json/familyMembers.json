@@ -1,0 +1,108 @@
+{
+    "familyMembers": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "dob": "1985-01-15",
+        "planType": "Gold Plan",
+        "startDate": "2023-01-01",
+        "endDate": "2024-12-31",
+        "groupName": "Employee Group A",
+        "imageUrl": "https://via.placeholder.com/150",
+        "dashboard": {
+          "welcomeMessage": "Welcome John!",
+          "planName": "Platinum Plan",
+          "status": "Active",
+          "effectiveDate": "2023-01-01",
+          "recentClaims": [
+            {
+              "provider": "Dr. Roberts",
+              "amountPaid": 500
+            },
+            {
+              "provider": "City Hospital",
+              "amountPaid": 1200
+            }
+          ]
+        },
+        "claimsSummary": [
+          {
+            "providerName": "Dr. Roberts",
+            "visitDate": "2024-02-15",
+            "amountBilled": 700,
+            "paymentStatus": "Paid"
+          },
+          {
+            "providerName": "City Hospital",
+            "visitDate": "2024-03-12",
+            "amountBilled": 1800,
+            "paymentStatus": "Processing"
+          }
+        ],
+        "spendingSummary": {
+          "deductibleSpent": 1500,
+          "deductibleLimit": 2500,
+          "outOfPocketSpent": 1000,
+          "outOfPocketLimit": 2000
+        },
+        "coverageBenefits": {
+          "planType": "Gold Plan",
+          "effectiveDate": "2024-01-01",
+          "endDate": "5000 USD",
+          "idNumber": "987123456"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Jane Doe",
+        "dob": "1982-05-20",
+        "planType": "Silver Plan",
+        "startDate": "2024-01-01",
+        "endDate": "2024-12-31",
+        "groupName": "Employee Group B",
+        "imageUrl": "https://via.placeholder.com/150",
+        "dashboard": {
+          "welcomeMessage": "Welcome Jane!",
+          "planName": "Silver Plan",
+          "status": "Active",
+          "effectiveDate": "2024-01-01",
+          "recentClaims": [
+            {
+              "provider": "Dr. Green",
+              "amountPaid": 300
+            },
+            {
+              "provider": "General Clinic",
+              "amountPaid": 600
+            }
+          ]
+        },
+        "claimsSummary": [
+          {
+            "providerName": "Dr. Green",
+            "visitDate": "2024-01-20",
+            "amountBilled": 400,
+            "paymentStatus": "Paid"
+          },
+          {
+            "providerName": "General Clinic",
+            "visitDate": "2024-02-18",
+            "amountBilled": 1000,
+            "paymentStatus": "Processing"
+          }
+        ],
+        "spendingSummary": {
+          "deductibleSpent": 700,
+          "deductibleLimit": 2000,
+          "outOfPocketSpent": 500,
+          "outOfPocketLimit": 1500
+        },
+        "coverageBenefits": {
+          "planType": "Silver Plan",
+          "effectiveDate": "2024-01-01",
+          "endDate": "3000 USD",
+          "idNumber": "654321987"
+        }
+      }
+    ]
+  }

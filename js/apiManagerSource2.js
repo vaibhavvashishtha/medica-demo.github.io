@@ -1,13 +1,12 @@
-class APIManager {
+class APIManager2 {
     constructor() {
-        this.apiConfig = new APIConfig('https://api.jsonbin.io/v3/b/', '$2a$10$2AbKx7fc0Ror1AVItfO7Ru8sMufS/SIbH/U6qQHL.OsHPhU7/zWbK', 'X-Master-Key', 'application/json');
+        this.baseUrl = 'https://api.jsonsilo.com/';
+        this.headers = {
+            'X-SILO-KEY': 'QcJZoNlEKJsmOQTNvzR3OmrPZQuEndzI1rS48cMDh9',
+            'Content-Type': 'application/json'
+        };
         this.config = {
-            login: '66e32170acd3cb34a8826c15',
-            dashboard: '66e321c1acd3cb34a8826c3c',
-            claims: '66e321a8acd3cb34a8826c35',
-            spending: '66e321d1ad19ca34f8a3f405',
-            coverage: '66e321b5ad19ca34f8a3f3fd',
-            familyMembers: '66e7f20aad19ca34f8a6e077'
+            familyMembers: '4541bc34-fe7a-4c97-be51-fca874d1fee9'
         };
     }
 
@@ -49,10 +48,10 @@ class APIManager {
 
     // General method to fetch data from the API
     fetchData(apiId) {
-        const url = `${this.apiConfig.baseUrl}${apiId}`;
+        const url = `${this.baseUrl}${apiId}`;
         return fetch(url, {
             method: 'GET',
-            headers: this.apiConfig.headers
+            headers: this.headers
         })
         .then(response => response.json())
         .then(data => data.record)
@@ -63,16 +62,5 @@ class APIManager {
     }
 }
 
-class APIConfig {
-    constructor(baseUrl, apiKey, apiKeyHeader, contentType) {
-        this.baseUrl = baseUrl;
-        this.headers = {
-            [apiKeyHeader]: apiKey,
-            'Content-Type': contentType
-        };
-    }
-}
-
-
 // Initialize API Manager
-const apiManager = new APIManager();
+const apiManager2 = new APIManager2();
