@@ -248,7 +248,7 @@ function fetchFamilyMembersData(data) {
                         <div class="bg-white shadow-lg rounded-lg p-6 max-w-sm mx-auto transition-transform transform hover:scale-105 hover:shadow-xl duration-300 ease-in-out">
                             <div class="flex items-center space-x-4">
                                 <div class="w-16 h-16 rounded-full bg-blue-100 flex-shrink-0">
-                                    <img class="rounded-full object-cover w-full h-full" src="https://placehold.co/150" alt="Family member image">
+                                    <img class="rounded-full object-cover w-full h-full" src="./assets/images/${member.profilePicture}" alt="Family member image">
                                 </div>
                                 <div>
                                     <h2 class="text-xl font-semibold text-gray-800">${member.name}</h2>

@@ -12,3 +12,31 @@
         </nav>
     </div>
 </div>
+
+<script>
+    // Function to show/hide the left nav
+    function toggleLeftNav() {
+        const leftNav = document.getElementById('hamburgerMenu');
+        if (leftNav.classList.contains('translate-x-0')) {
+            leftNav.classList.replace('translate-x-0', '-translate-x-full');
+        } else {
+            leftNav.classList.replace('-translate-x-full', 'translate-x-0');
+        }
+    }
+
+    // Function to hide the left navigation when clicking outside of it
+    function handleClickOutside(event) {
+        const leftNav = document.getElementById('leftNav');
+        const hamburgerButton = document.getElementById('hamburgerButton');
+
+        // Check if the click was outside of the left nav and not on the hamburger button
+        if (!leftNav.contains(event.target) && event.target !== hamburgerButton) {
+            if (leftNav.classList.contains('translate-x-0')) {
+                leftNav.classList.replace('translate-x-0', '-translate-x-full');  // Hide the nav
+            }
+        }
+    }
+
+    // Add a global click event listener to handle outside clicks
+    document.addEventListener('click', handleClickOutside);
+</script>
